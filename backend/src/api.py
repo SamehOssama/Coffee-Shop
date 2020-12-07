@@ -108,21 +108,23 @@ def patch_drink(drink_id):
     """
         Edit the drink with the given ID.
     """
-    title = request.get_json().get('title')
-    recipe = json.dumps(request.get_json().get('recipe'))
+    try:
+        title = request.get_json().get('title')
+        recipe = json.dumps(request.get_json().get('recipe'))
 
-    drink = Drink.query.get(drink_id)
-    print(title, recipe)
-    print(type(recipe))
-    drink.title = title if title != 'null' else drink.title
-    drink.recipe = recipe if recipe != 'null' else drink.recipe
-    drink.update()
+        drink = Drink.query.get(drink_id)
+        print(title, recipe)
+        print(type(recipe))
+        drink.title = title if title != 'null' else drink.title
+        drink.recipe = recipe if recipe != 'null' else drink.recipe
+        drink.update()
 
-    return jsonify({
-        'success': True,
-        'drinks': drink.long()
-    })
-
+        return jsonify({
+            'success': True,
+            'drinks': drink.long()
+        })
+    except:
+        abort(404)
 
 '''
 @TODO implement endpoint
@@ -139,13 +141,17 @@ def delete_drink(drink_id):
     """
         Delete the drink with the given ID.
     """
-    drink = Drink.query.get(drink_id)
-    drink.delete()
+    try:
+        drink = Drink.query.get(drink_id)
+        drink.delete()
 
-    return jsonify({
-        'success': True,
-        'delete': drink_id
-    })
+        return jsonify({
+            'success': True,
+            'delete': drink_id
+        })
+    
+    except:
+        abort(404)
 
 ## Error Handling
 '''
@@ -154,10 +160,10 @@ Example error handling for unprocessable entity
 @app.errorhandler(422)
 def unprocessable(error):
     return jsonify({
-                    "success": False, 
-                    "error": 422,
-                    "message": "unprocessable"
-                    }), 422
+        "success": False, 
+        "error": 422,
+        "message": "Unprocessable"
+    }), 422
 
 '''
 @TODO implement error handlers using the @app.errorhandler(error) decorator
@@ -174,9 +180,46 @@ def unprocessable(error):
 @TODO implement error handler for 404
     error handler should conform to general task above 
 '''
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({
+        "success": False,
+        "error": 404,
+        "message": "Resource not found"
+    }), 404
 
+@app.errorhandler(405)
+def not_allowed(error):
+    return jsonify({
+        "success": False,
+        "error": 405,
+        "message": "Method not allowed"
+    }), 405
 
 '''
 @TODO implement error handler for AuthError
     error handler should conform to general task above 
 '''
+@app.errorhandler(400)
+def bad_request(error):
+    return jsonify({
+        "success": False,
+        "error": 400,
+        "message": "Bad request"
+    }), 400
+
+@app.errorhandler(401)
+def unauthorized(error):
+    return jsonify({
+        "success": False,
+        "error": 401,
+        "message": "Unauthorized access"
+    }), 401
+
+@app.errorhandler(403)
+def forbidden(error):
+    return jsonify({
+        "success": False,
+        "error": 403,
+        "message": "Forbidden access"
+    }), 403
