@@ -205,7 +205,7 @@ def bad_request(error):
     return jsonify({
         "success": False,
         "error": 400,
-        "message": "Bad request"
+        "message": error.description if error.description is not None else "Bad request"
     }), 400
 
 @app.errorhandler(401)
@@ -213,7 +213,7 @@ def unauthorized(error):
     return jsonify({
         "success": False,
         "error": 401,
-        "message": "Unauthorized access"
+        "message": error.description if error.description is not None else "Unauthorized access"
     }), 401
 
 @app.errorhandler(403)
@@ -221,5 +221,5 @@ def forbidden(error):
     return jsonify({
         "success": False,
         "error": 403,
-        "message": "Forbidden access"
+        "message": error.description if error.description is not None else "Forbidden access"
     }), 403
