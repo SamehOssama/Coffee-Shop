@@ -90,7 +90,7 @@ def post_drink(payload):
 
     return jsonify({
         'success': True,
-        'drinks': drink.long()
+        'drinks': [drink.long()]
     })
 
 
@@ -124,7 +124,7 @@ def patch_drink(payload, drink_id):
 
         return jsonify({
             'success': True,
-            'drinks': drink.long()
+            'drinks': [drink.long()]
         })
     except:
         abort(404)
