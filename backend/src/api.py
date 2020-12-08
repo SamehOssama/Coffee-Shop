@@ -204,26 +204,15 @@ def not_allowed(error):
 @TODO implement error handler for AuthError
     error handler should conform to general task above 
 '''
-@app.errorhandler(400)
-def bad_request(error):
-    return jsonify({
-        "success": False,
-        "error": 400,
-        "message": error.description if error.description is not None else "Bad request"
-    }), 400
-
-@app.errorhandler(401)
+@app.errorhandler(AuthError)
 def unauthorized(error):
+    response = error
+    error_code = response.status_code
+    message = response.error['description']
+    code = response.error['code']
     return jsonify({
         "success": False,
-        "error": 401,
-        "message": error.description if error.description is not None else "Unauthorized access"
-    }), 401
-
-@app.errorhandler(403)
-def forbidden(error):
-    return jsonify({
-        "success": False,
-        "error": 403,
-        "message": error.description if error.description is not None else "Forbidden access"
-    }), 403
+        "error": error_code,
+        "message": message,
+        "code": code
+    }), error_code
