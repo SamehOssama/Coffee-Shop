@@ -1,10 +1,23 @@
 # Coffee Shop Backend
 
+This project is a coffee shop api for udacity's advance web development nanodegree and serves as a test for our knowledge about APIs' authentication and authorization from Module 4 : Identity and Access Management. The users have varying access to actions depending on their role and their permissions from clients to managers. Anyone can access the shop's menu.
+
+
+- [Getting Started](#getting-started)
+  - [Installing Dependencies](#installing-dependencies)
+  - [Running the server](#running-the-server)
+- [API References](#api-references)
+  - [Errors](#errors)
+  - [Endpoints](#endpoints)
+
+
 ## Getting Started
+
+----
 
 ### Installing Dependencies
 
-#### Python 3.7
+#### Python 3.8
 
 Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
 
@@ -48,38 +61,32 @@ flask run --reload
 
 The `--reload` flag will detect file changes and restart the server automatically.
 
-## Tasks
+## API References
 
-### Setup Auth0
+----
 
-1. Create a new Auth0 Account
-2. Select a unique tenant domain
-3. Create a new, single page web application
-4. Create a new API
-    - in API Settings:
-        - Enable RBAC
-        - Enable Add Permissions in the Access Token
-5. Create new API permissions:
-    - `get:drinks-detail`
-    - `post:drinks`
-    - `patch:drinks`
-    - `delete:drinks`
-6. Create new roles for:
-    - Barista
-        - can `get:drinks-detail`
-    - Manager
-        - can perform all actions
-7. Test your endpoints with [Postman](https://getpostman.com). 
-    - Register 2 users - assign the Barista role to one and Manager role to the other.
-    - Sign into each account and make note of the JWT.
-    - Import the postman collection `./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`
-    - Right-clicking the collection folder for barista and manager, navigate to the authorization tab, and including the JWT in the token field (you should have noted these JWTs).
-    - Run the collection and correct any errors.
-    - Export the collection overwriting the one we've included so that we have your proper JWTs during review!
+- Base url: This app is not hosted on a web server, instead, it is hosted locally at the default ```http://127.0.0.1:5000/```
+- Authentication: This version of the app doesn't require authentication.
 
-### Implement The Server
+### Errors
+HTTP requests always come with a code to determine the response state from `2xx` codes that means success to `4xx` codes that means there was an error with the request.
+Here is a list of the expected response codes from this API and their meaning:
 
-There are `@TODO` comments throughout the `./backend/src`. We recommend tackling the files in order and from top to bottom:
+| Code    | Text               | Description                                                                       |
+| ------- | ------------------ | --------------------------------------------------------------------------------- |
+| **200** | OK                 | Everything worked as expected.                                                    |
+| **400** | Bad Request        | The request is missing a required parameter.                                      |
+| **401** | Unauthorized       | No valid token was presented to the API.                                          |
+| **403** | Forbidden          | The API user doesn't have the this permission.                                    |
+| **404** | Not found          | The requested resource could not be found.                                        |
+| **405** | Method not allowed | The request method is not supported for the requested resource.                   |
+| **422** | unprocessable      | The request was well-formed but was unable to be followed due to semantic errors. |
 
-1. `./src/auth/auth.py`
-2. `./src/api.py`
+### Endpoints
+```html
+GET '/drinks'
+GET '/drinks-detail'
+POST '/drinks'
+PATCH '/drinks/drink_id'
+DELETE '/drinks/drink_id'
+```
